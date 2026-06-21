@@ -479,17 +479,26 @@
             .carousel-card-3 {
                 flex: 0 0 calc(50% - 0.75rem);
                 min-width: calc(50% - 0.75rem);
-            }
         }
+        }
+
         @media (max-width: 600px) {
             .carousel-card-3 {
-                flex: 0 0 calc(50% - 0.75rem);   
-                min-width: calc(50% - 0.75rem); 
+                flex: 0 0 100%;
+                min-width: 100%;
+            }
+            .carousel-track-3 {
+                gap: 0;
+            }
+            .carousel-controls-3 {
+                display: flex !important;
+                justify-content: center;
+                gap: 1rem;
+                margin-top: 1rem;
             }
             .top-nav { padding: 0.8rem 1rem; }
             .section-title { font-size: 1.4rem; }
             .content-panel { padding: 1rem; }
-            
         }
         /*id：加入Js的意思
 css html js 三者的關係是什麽？ why同一個doc 出現這3個?
@@ -695,7 +704,7 @@ Ms Cheuk Yan Liu
 `},
 
         { name: "王然Sir", msg: `
-截稿前未收到回復
+很抱歉，我唔記得寫嘢俾6C班同學。
 `},
         { name: "Siu Sir", msg: `
 截稿前未收到回復
@@ -969,7 +978,7 @@ Like py still have str and val crush tgt, so use ${} can help like f{}in py*/
 
     function renderTeacherPage() {
         let html = `<div class="section-card"><div class="section-title">🌟 老師留言區</div>`;
-        html += `<div class="info-note" style="margin-bottom:1rem;">💡 點擊老師卡片放大睇完整留言</div>`;
+        html += `<div class="info-note" style="margin-bottom:1rem;">💡 點擊卡片放大睇完整留言</div>`;
         teacherMessages.forEach(t => {
             const preview = t.msg.substring(0, 80);
             html += `
@@ -1009,11 +1018,19 @@ html += ... your code
 
     let currentPageIndex = 0;
     let itemsPerPage = 3;
+
+    function getItemsPerPage() {
+        const width = window.innerWidth;
+        if (width < 600) return 1;
+        if (width < 900) return 2;
+        return 3;
+    }
     let totalPages = Math.ceil(carouselMessages.length / itemsPerPage);
 
     function getCurrentCards() {
-        const start = currentPageIndex * itemsPerPage;
-        const end = start + itemsPerPage;
+        const perPage = getItemsPerPage();
+        const start = currentPageIndex * perPage;
+        const end = Math.min(start + perPage, carouselMessages.length);
         return carouselMessages.slice(start, end);
     }
 
@@ -1038,7 +1055,9 @@ html += ... your code
         }
     }
     function renderCarouselPage() {
+        const perPage = getItemsPerPage();
         const currentCards = getCurrentCards();
+        const totalPages = Math.ceil(carouselMessages.length / perPage);
         let cardsHtml = '';
         currentCards.forEach(msg => {
             cardsHtml += `
@@ -1068,6 +1087,8 @@ html += ... your code
     function bindCarouselEvents() {
         const prevBtn = document.getElementById('prevPageBtn');
         const nextBtn = document.getElementById('nextPageBtn');
+        const perPage = getItemsPerPage();
+        const totalPages = Math.ceil(carouselMessages.length / perPage);
         
         if (prevBtn) {
             prevBtn.onclick = () => {
@@ -1099,6 +1120,17 @@ html += ... your code
                 const fullMsg = card.getAttribute('data-fullmsg');
                 showExpandedMessage(name, fullMsg);
             };
+        });
+        window.addEventListener('resize', () => {
+            const newPerPage = getItemsPerPage();
+            const newTotalPages = Math.ceil(carouselMessages.length / newPerPage);
+            if (newTotalPages !== totalPages) {
+                totalPages = newTotalPages;
+                if (currentPageIndex >= totalPages) {
+                    currentPageIndex = totalPages - 1;
+                }
+                refreshCarouselUI();
+            }
         });
     }
 
