@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>6C Clover 紀念冊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Poppins', system-ui, sans-serif;
+            background: #eef5ea;
+            color: #1f2e1c;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            background: #fafef7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 30px rgba(70, 110, 55, 0.08);
+        }
+
+        .top-nav {
+            background: linear-gradient(105deg, #b2ebd6 0%, #9ed9c2 100%);
+            width: 100%;
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            gap: 8px;
+        }
+        .logo-img {
+            height: 42px;
+            width: auto;
+            max-width: 120px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+        .logo-text {
+            font-size: 1.55rem;
+            font-weight: 600;
+            color: #1f4427;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 245, 0.85);
+            border: none;
+            padding: 0.6rem 1.25rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #235b2a;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+        .nav-btn.active {
+            background: #f7ffea;
+            box-shadow: inset 0 0 0 2px #4b8b3f;
+        }
+
+        .content-panel {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 250, 0.96);
+            border-radius: 32px;
+            padding: 2rem;
+            box-shadow: 0 12px 28px rgba(55, 80, 40, 0.08);
+            border: 1px solid rgba(150, 190, 130, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #2c6e3c;
+            border-left: 6px solid #74c690;
+            padding-left: 1rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .teacher-msg {
+            background: #f4fce8;
+            border-radius: 24px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid #6aa97b;
+            cursor: pointer;
+            transition: all 0.2s;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .teacher-msg:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            background: #f0fce4;
+        }
+        .teacher-name {
+            font-weight: bold;
+            color: #2d6a3b;
+            font-size: 1.1rem;
+        }
+        .teacher-preview {
+            font-size: 0.9rem;
+            color: #5a6e52;
+            margin-top: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .teacher-hint {
+            font-size: 0.65rem;
+            color: #8fb37c;
+            margin-top: 8px;
+            text-align: right;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 32px;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            animation: fadeInUp 0.4s ease;
+        }
+        .modal-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            background: white;
+            padding: 0 0 0 10px;
+            z-index: 10;
+        }
+        .modal-close:hover {
+            color: #333;
+        }
+        .modal-name {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #2c6e3c;
+            margin-bottom: 1.2rem;
+            padding-right: 30px;
+        }
+        .modal-message {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #2d3e28;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-y: auto; 
+        }
+        .modal-message a {
+            color: #3c7e48;
+            text-decoration: underline;
+        }
+        .modal-message a:hover {
+            color: #569e6b;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .carousel-track-3 {
+            display: flex;
+            transition: transform 0.5s ease;
+            gap: 1.5rem;
+        }
+        .carousel-card-3 {
+            flex: 0 0 calc(33.333% - 1rem);
+            min-width: calc(33.333% - 1rem);
+            background: linear-gradient(145deg, #ffffff, #fefce8);
+            border-radius: 28px;
+            padding: 1.2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #cbe5c0;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .carousel-card-3:hover {
+            transform: translateY(-5px);
+            background: #fffff5;
+            border-color: #9ed18a;
+        }
+        .card-name-3 {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #3c7e48;
+            border-bottom: 2px dashed #c2dcb2;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .card-preview-3 {
+            font-size: 0.8rem;
+            color: #5a6e52;
+            line-height: 1.5;
+            flex: 1;
+        }
+        .card-hint-3 {
+            margin-top: 10px;
+            font-size: 0.65rem;
+            color: #8fb37c;
+            text-align: center;
+        }
+        .carousel-controls-3 {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .ctrl-btn {
+            background: #77b28a;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .ctrl-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .page-info {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #6f9668;
+        }
+
+        .expanded-message {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f0f7ea, #e8f2e0);
+            border-radius: 32px;
+            border-left: 8px solid #6aa97b;
+            animation: fadeInUp 0.4s ease;
+            position: relative;
+        }
+        /* 動畫的意思*/
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .expanded-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c6e3c;
+            margin-bottom: 0.8rem;
+        }
+        .expanded-content {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #2d3e28;
+            white-space: pre-wrap;
+        }
+        .close-expand {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8fb37c;
+            float: right;
+        }
+
+        .info-note {
+            background: #eef6e9;
+            border-radius: 28px;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .quiz-area {
+            background: #fef9e6;
+            border-radius: 28px;
+            padding: 1.5rem;
+        }
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            line-height: 1.4;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .quiz-option {
+            background: #eef3e9;
+            padding: 0.7rem 1rem;
+            border-radius: 60px;
+            cursor: pointer;
+            border: 1px solid #c2dcb2;
+            transition: 0.1s;
+        }
+        .quiz-option:hover { background: #d9e8d0; }
+        .result-area {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        .score-big {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2c6e3c;
+        }
+        .familiarity {
+            font-size: 1.5rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #e2f0da;
+            border-radius: 48px;
+        }
+
+        .pdf-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        .pdf-iframe {
+            width: 100%;
+            height: 85vh;
+            border: none;
+            border-radius: 24px;
+        }
+        
+        .links-section {
+            margin-bottom: 2rem;
+        }
+        .links-subtitle {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #3c7e48;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #c8e0ba;
+        }
+        .links-list-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .link-item-vertical {
+            background: #e2f0da;
+            border-radius: 20px;
+            padding: 0.8rem 1.2rem;
+            transition: 0.2s;
+            border-left: 5px solid #6aa97b;
+        }
+        .link-item-vertical:hover {
+            background: #d2e8c6;
+            transform: translateX(5px);
+        }
+        .link-item-vertical a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #2c6e3c;
+            display: block;
+        }
+        .link-desc {
+            font-size: 0.75rem;
+            color: #6f9668;
+            margin-top: 5px;
+        }
+        .ig-card {
+            background: linear-gradient(135deg, #fdf4e3, #ffe6f0);
+            border-left-color: #e4405f;
+        }
+        .ig-card a {
+            color: #c13584;
+        }
+        .links-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .link-card {
+            background: #e2f0da;
+            border-radius: 28px;
+            padding: 1rem 1.5rem;
+            transition: 0.2s;
+            border-left: 8px solid #6aa97b;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .btn-submit {
+            background: #77b28a;
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            color: #86a37c;
+        }
+        /* 不同媒介開啓的意思*/
+        @media (max-width: 900px) {
+            .carousel-card-3 {
+                flex: 0 0 calc(50% - 0.75rem);
+                min-width: calc(50% - 0.75rem);
+            }
+        }
+        @media (max-width: 600px) {
+            .carousel-card-3 {
+                flex: 0 0 calc(50% - 0.75rem);   
+                min-width: calc(50% - 0.75rem); 
+            }
+            .top-nav { padding: 0.8rem 1rem; }
+            .section-title { font-size: 1.4rem; }
+            .content-panel { padding: 1rem; }
+            
+        }
+        /*id：加入Js的意思
+css html js 三者的關係是什麽？ why同一個doc 出現這3個?
+HTML (結構)、CSS (外觀)、JS (動作) 在大檔案
+ <span> 非常類似於 <div> 元素，但 <div> 是一個塊級元素，而 <span> 是一個行級元素。*/
+    </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+    <div class="top-nav">
+        <div class="logo-area" id="homeLogoBtn">
+            <div style="width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                <iframe loading="lazy" src="https://www.canva.com/design/DAHK03T4lxE/Ge549N4LRRH-gSdzyEtm2w/view?embed" allow="fullscreen" style="width:100%; height:100%; border:none; border-radius:12px;"></iframe>
+            </div>
+            <span class="logo-text">6C Clover</span>
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn" data-page="carousel">🎓 留言板</button>
+            <button class="nav-btn" data-page="teacher">🌟 老師留言區</button>
+            <button class="nav-btn" data-page="pdf">📅 數算主恩</button>
+            <button class="nav-btn" data-page="game">🤡 彩蛋遊戲</button>
+            <button class="nav-btn" data-page="links">🔗 6C鏈接</button>
+        </div>
+    </div>
+    <div class="content-panel" id="mainContent"></div>
+    <footer>🍀 6Clover 紀念冊</footer>
+</div>
+
+<script>
+    /*Js array*/
+    const teacherMessages = [
+        { name: "Dr LO", msg: `
+給 456Clovers,   
+
+    轉眼三年時光，就過了。在 Mr Lo 和同學的感受中，這三年的時間體感，我想是不一樣的。畢竟，年紀同經歷上實在不同。對於青年人，每一個經歷都很新鮮，尤其是在高中裏，同一班相處久了，充滿友情的伙伴一起讀書、玩樂和成長，是一生中其中一段最值得懷念的回憶。在晚會上，回看三年點點滴滴，實有珍貴。希望你哋一班 clovers 可以成為一生的友伴，互相扶持。
+    
+    對於大家，在當了父親之後的我，總不免以父親的角度，為大家考量。所以呢，我想對大家來說最重要的是，「你要保守你心，勝過保守一切，因為一生的果效是由心發出。」好好選擇確當的道路行，好好堅持！
+    
+    曾經分享過電影 Rocky Balboa 的一段片段，當中一段對話希望可以成為大家的一個支持。
+"Let me tell you something you already know. The world ain't all sunshine and rainbows. It's a very mean and nasty place and I don't care how tough you are, it will beat you to your knees and keep you there permanently if you let it."
+"You, me, or nobody hits is gonna hit as hard as life. But it ain't about how hard you hit, it's about how hard you get hit and keep movin' forward. How much you can take, and keep movin' forward. That's how winning is done!"
+🔗 觀看片段：https://www.youtube.com/watch?v=vyYDz_A6HO8
+    
+    我想人生不是一場比賽，當中實在沒有輸贏成敗。我會形容更像一場遊戲，不竟大家都已經進場，遊戲仍然繼續中。但是遊戲的彈性十分大，有它難玩之處，亦有它好玩的地方，而且總是充滿驚喜，有時又有絕處逢生的幸運。The most enjoyable part is the journey itself, not the result. So enjoy your game！作為一個 game，總是要計算勝率。而勝率最重要是堅持在每一件事上盡力去做，絕不敷衍。
+    
+    早前，已經退休的網壇名將費達拿(Roger Federer) 在Dartmouth College 2024 的一場演講上說，他的得分率只是 54%，但是他勝出了80% 的球賽，足已令他成為世界第一。輸贏不在一分，而是每一分都盡自己最大的努力堅持，持之以恆，堅持自己的信念同目標！在人生長跑上，多一點的勝率已足夠勝出人生的球賽。
+In his speech, he said, "The best in the world are not the best because they win every point. It's because they know they'll lose again and again, and have learned how to deal with it. You accept it. Cry it out if you need to then ... force a smile."
+🔗 觀看演講：https://home.dartmouth.edu/news/2024/06/2024-commencement-address-roger-federer
+
+    另外，納瓦爾 (Naval Ravikant) 在一個訪問裏提到："The only true test of intelligence is if you get what you want out of life. And there's two parts to this. One is getting what you want, so you know how to get it. And the second is wanting the right things, knowing what to want in the first place."
+    
+    認真了解自己所思所想，認識自己的局限，盡力挑戰自己，optimize 你的人生。
+🔗 觀看訪問：https://www.instagram.com/reels/DH0hwxQziDp/
+🔗 完整版本：https://www.youtube.com/watch?v=KyfUysrNaco
+
+    對十八歲的您，一年的時光是是人生的 1/18，相當於 5.55%。到了三十而立之年，一年的時光變成了人生的 1/30，已經成了3.33%，往後的數十年裏，一年佔人生的比例會愈來愈低。所以好好把握離開主恩後的機會，好好學習，努力成長。在 AI 世代，我仍然相信認真學習，認真閱讀是最重要的，不要被 AI 洗去你寶貴學回來的知識同思考能力。
+    
+    最後，祝願大家在人生旅途上，揾到自己所想所愛，在迷失之時，僅記主的愛仍然在您身邊。
+
+6C 班主任 Mr Lo Yiu Ming
+June 13, 2026
+
+🔗 完整版本：https://docs.google.com/document/d/16qO5iNJkW-gHIEuuxf18AJBGv7iO_01TWsOY4giIDug/edit?usp=sharing   (Use cdg account)
+`},
+        { name: "Ms. Tse (中文ver)", msg: `
+給可愛的6C同學 :
+
+身為班主任兼生物科老師，我最懷念的，是偶然突擊班房，請你們吃朱古力等零食；有時，你們剛上完體育課、大汗淋漓地回到課室準備上生物課時，我會親手為你們送上餅乾和朱古力來充飢，那些美好的時光總是令人難忘。在生物學上，這些甜點為你們迅速補充了身體所需的能量；但在心靈上，這更是我們師生之間最溫馨、最甜蜜的愛心連結。
+
+你們的學術成績非常優秀，深信大家定能順利升讀大學，開展精彩的人生新一頁。正如耶穌溫柔地教導我們：「要愛人如己。」我衷心期盼你們未來能帶著這份無私的愛去服務社會，關懷身邊有需要的每一個人。在追求卓越與成功的同時，請務必保持謙遜，跟隨耶穌的腳步。
+
+母校永遠是你們溫暖的家，期待你們學成歸來，用當天感受過的愛，攜手扶持並祝福學弟學妹。
+
+掛念你們的班主任兼生物科秀賢老師
+二零二六年六月四日
+`},
+        { name: "Ms. Tse (Eng ver)", msg: `
+Dear 6C Cute Students, 
+
+Congratulations on your graduation! 
+
+As a Class Teacher who also teaches Biology, my fondest memories are of those times I would drop by the classroom for surprise visits, treating you all to chocolates and other snacks. Sometimes, right after P.E. class, when you would return to the classroom, dripping with sweat and getting ready for biology, I would personally hand out biscuits and chocolates to tide you over. I truly miss those wonderful moments. In our biology classes, we learned how these treats quickly refuel your physical cells, but to my heart, it was a pure expression of love and our special, warm connection. 
+
+
+Your academic performance is truly outstanding, and you are fully prepared to excel in your university journeys ahead. As you step into this exciting new world, always remember Jesus’ beautiful commandment: "Love your neighbor as yourself." I sincerely hope you will carry this sweet spirit to serve the community and care deeply for everyone around you. While achieving great excellence, always remain humble and walk closely with God. 
+
+This school remains your home; we eagerly await your return to love, support, and bless your juniors.
+
+With love and fond memories,
+Miss Tse (Class/Biology Teacher)
+June 4, 2026
+`},
+        { name: "吳老師", msg: `
+中六丙班同學：
+
+    回顧與中六丙班共度的三年時光，感情慢慢地在內心滋長，了無聲色，不知不覺六丙班已成了生活的一部分。時光荏苒，轉眼已是離別之時，門面說話，我不懂說，離別之情也非筆墨可抒，我只想感謝你們一路走來帶給我的一切一切，也感謝你們包容我的嚴厲和訓斥，尖酸和冷漠。
+
+    這三年相處下來，我眼中的你們，比較被動，亦稍欠自信。但我想說：在上帝眼中，每個人都是寶貴的。你們要相信自己有著無限的可能，不要輕看自己。此外，人浮於事，社會瞬息萬變，將來你們將面對更大的競爭，所以不要再立於原地，呆等機會的到臨，反要主動出擊，爭取不同的機遇，積極為自己的前程鋪路。
+
+    離開，是為了變得更獨立，更成熟。所以，我此刻是含笑揮手，目送你們離巢高飛，振翅遠颺。六丙班同學，你們要「常存信心和無虧的良心」，並緊記「信心因著行為纔得成全」。希望你們能懷著自信，靠著基督的信仰，邁出你們的腳步，實實在在行所當行的路，活出生命的價值，讓自己俯仰無愧於天地。
+
+吳老師
+二零二六年六月三日
+`},
+        { name: "Ms Lam", msg: `
+Dear 456C 2023-2026,
+ 
+Where did it start? I taught some of you in S.1 ENG and ENR at the height of the pandemic back in 2020. It just brought me great pleasure to reunite with you in S.4 and to meet some new faces. From the beginning I’ve known these three years was going to be enjoyable.
+ 
+I would certainly miss the time when we had fruitful class discussions, debates, or games. I would certainly miss your clean and punctual homework record and your serious and meticulous homework – yes there had been a lot. Of course, what impressed me the most is your camaraderie, which had been the hallmark of our school and I think your Music Day performance with the self-written piece had set the bar very high, and everyone else in CDG looked up to you. They either wanted to be part of you or felt envious.
+ 
+Seldom did I teach a class as sweet and as kind as you. I believe none of us would forget our last lesson in Room 505, when you shed so many tears of love. In fact, these three years had been tumultuous for me as I was crippled by illnesses, but you never ceased to show your care and understanding, which had been substantial in sustaining my teaching journey. All these have been turned into unique memories which are irreplaceable.
+ 
+Congratulations on finishing the toughest exam! Oh but wait – I’d say – the even tougher exam just commences now. What is it?
+ 
+It’s to say goodbye.
+ 
+Yes. Graduation may mean that it could be the last time for you all to gather like this.
+ 
+Each of you will go onto different paths. While I’ve faith in you that there’ll be reunions, the future looks challenging in the post-COVID era with the rise of AI, not to mention the hurdles each of you will face. I hope you’ll remember what I said: No matter how precious memories might be, they couldn’t conquer time. Only love can transcend it. And Jesus is the source of unconditional love. If there is one thing I wish you to remember as your teacher, it would be this. The most important thing is to reunite one day in heaven.
+ 
+It’s a blessing to have created these memories together. You are always my pride and my joy. Don’t cry because it’s over (oh actually it’s okay, if not good, to cry!); smile because it happened. Oh – and I wish you bad luck. (wink)
+ 
+With love (and lots of clovers),
+Ms Lam
+June 9, 2026
+`},
+        { name: "Ms Chin", msg: `
+
+    雖然今年才正式成為你們的科任老師，但從與你們的相處中，你們每一位都很友善，我感受不到你們把我當作一位只相識了短短數個月的老師。感謝你們的信任，讓我能與你們一起走過這段DSE之路。😊
+
+    甚願在未來的日子，你們繼續以真誠對待身邊的人與事，但別因太緊張結果而選擇放棄機會，珍惜每一次讓自己成長契機。最重要的是，讓天父爸爸與你一同行這人生路，相信祂必拖帶你走上那恩典之路。✨✨
+
+Ms Chin 😊,
+5/6/2026
+`},
+        { name: "Ms Hung", msg: `
+各位6C同學, 
+
+    雖然只教了你們一年的公民科，但對你們卻有著一份獨特的熟悉與親切感——大概是因為班裡有一部分同學，我們早在初中時就已經結下了緣份。
+
+    在我的印象中，6C班是一個充滿活力與創意的大集體。我們的課堂總是洋溢著歡樂，而你們在課堂上的分享更是常常帶給我驚喜。
+
+    如今你們畢業，即將踏入人生的另一個新階段。願你們帶著這份熱忱繼續前行，勇敢追夢。祝願大家前程錦繡，頂峰相見！
+
+Ms Hung
+5/6/2026
+`},
+        { name: "Ms Wong", msg: `
+6C同學：
+
+    感恩能在主恩與你們相遇，欣賞你們認真學習、勇於嘗試的態度。每次上課見到你們投入參與，都令我份外增添動力！你們是一班很有愛的同學，總是會互相扶持、勉勵前行。跟你們相處，也特別覺得窩心。
+
+    祝願你們前程似錦，在人生的路途上繼續結伴前行！
+
+黃祉羚老師
+13/6/2026
+`},
+        { name: "Mr Lui", msg: `
+截稿前未收到回復
+`},
+        { name: "Ms Tse", msg: `
+截稿前未收到回復
+`},
+        { name: "Mr Yamaha", msg: `
+
+    最初相識，你們給我的印象是一群著重成績、埋頭苦幹的學生。
+
+    直到畢業在即，驀然回首，才發覺你們每個人都有著極其鮮明的個性：有的大情大性、直率可愛；有的外冷內熱，溫柔內斂；有的看似嚴肅，卻總能一語驚人、無比幽默。
+
+    三年的應試歲月，像一層灰濛濛的濾鏡，悄悄掩蓋了你們的光芒。現在畢業了，是時候重新執起畫筆，是把那被覆蓋而變淡的色彩重新着色。趁著年輕，去追尋、去冒險，好好為自己寫下美好的篇章，無怨無悔地大步向前吧！
+
+Mr.Yamaha 
+8/6/2026
+`},
+        { name: "子榮 Sir", msg: `
+
+    雖然未能執教6C全班，但你們那份對學習的堅毅卻令我印象深刻。
+    即使學習上面對難關，從未輕言放棄；班際比賽時，你們顯得團結一致，全力以赴，為勝利而拼搏。你們既有鬥志，亦藏着一顆溫暖的心 ,平易近人。
+
+    願你們帶着這份光芒，繼續走前面人生的道路。
+
+Mr Chan Tsz Wing
+8/6/2026
+`},
+        { name: "Ms Liu", msg: `
+Dear 6C,
+
+    雖然我未有機會教導你們班每一位同學，我仍然希望為你們離開迦密主恩後的新旅程送上祝福。回想差不多四年前我剛到主恩，我感恩在你們中三的時候認識你們，更是一部份同學的班主任。你們真摯可愛的性格讓我體會主恩學生的純良，又讓我看見你們的不一樣，各有恩賜。
+
+    轉眼你們要穿上畢業袍，你們中三時的臉孔依然存留在我眼中，然而你們已是從許多挑戰中成長，要成為「初級大人」！
+
+    畢業快樂，前程似錦，上帝恩典必與你們同在！
+
+Ms Cheuk Yan Liu
+4/6/2026
+`},
+
+        { name: "王然Sir", msg: `
+截稿前未收到回復
+`},
+        { name: "Siu Sir", msg: `
+截稿前未收到回復
+`},
+
+        { name: "So Sir", msg: `
+
+    各位同學，很久不見，但在主恩與大家相處的日子仍然記得歷歷在目。
+    恭喜大家終於完成人生第一個難關，你們要開始踏入更廣闊的世界，追尋自己的夢想。「人生有無一個To-Do List?」這個問題在我年輕的時侯一直都有問自己，這張List不是什麼名與利，單純是「我想做到什麼事情?」，豐富你人生的色彩，可能只是一場馬拉松、一次台灣單車環島遊。
+
+    要記住：每個人都有獨特的節奏同步調，有人快步追趕目標，有人慢步欣賞沿途風光，快慢沒有對錯，是一種選擇，希望你會找到你人生的「To-Do List」，並且永遠以真誠與良善對待他人與自己。
+
+蘇Sir
+4/6/2026
+`},
+    ];
+
+    const carouselMessages = [
+         { name: "Renee", msg: `冇諗到咁快就過咗三年, 要同6C講拜拜～
+6C係一班全女班, 一開始以為會係好多女仔玩得好熟嘅一班, 後來發現, 8個男仔可以抵擋到22個女仔, 大家逐漸互相熟絡, 經歷過Music day、各種quiz, 係同甘共苦嘅一班🫶🏻
+
+最難忘嘅moment絕對係F5 music day, 嗰排大家一直係咁練歌, 雖然有唔同嘅意見有分歧, 但係大家都係努力包容, 一齊向冠軍目標進發! 唱完歌嘅嗰下, 大家都覺得好感動, 終於完成咗一件事❤️‍🔥都好似係自此之後, Kenny就開始瘋狂唱歌, 然後全班冇咁分開男女, 開始喺廣州、music exam一齊笑。
+
+遇到大家咁善良單純嘅一班,覺得好幸福好幸福🍀` },
+         { name: "Silena", msg: `對我而言, 6C有種神奇的魔力。每次踏進課室, 聽見大家的日常對話, 內心的煩躁總能被撫平。
+最難忘的不是活動日, 而是像Ms. Lam所說的每個日常上課瞬間。是你們和老師把我從對未來的焦慮拉回當下。
+願大家都能在細碎生活中感知幸福, 平安喜樂。` },
+        { name: "Zoe", msg: `記憶中的456C課室總是充滿歡聲笑語的，每個人都是很特別的存在。
+若要說一個最難忘的回憶，那就是F.5那年的Music Day我們有了屬於我們班的一首歌，一群人一起完成同一件事情的感覺真的很奇妙，現在回想起來還挺青春熱血的。
+很高興可以認識到6C的各位，祝福大家都可以成為自己想成為的大人。` },
+        { name: "Angela", msg: `6C係好玩得同凝聚力好強嘅一班，記得好似在running friends+班相+壁報時拿了第一名，好榮幸是其中一份子arr。
+印象中沒有最難忘的一瞬間，但難忘的是上課時候的日子，尤其是聽老師講學習以外嘅話題，平時上堂氛圍好搞笑，令到催眠的課堂有趣起來。
+希望6C大家都會keep住contact啦。` },
+        { name: "Megan", msg: `搞笑嘅 456C班為我嘅校園生活增添不少色彩，同時亦係互相照應嘅一班，喺艱辛學業嘅路上互相鼓勵支持，喺同一條路上好團結，不知不覺間已經一齊經歷咗好多，留下好多珍貴嘅回憶，直到依家仍依稀記得中六運動會第一日結束後嘅BBQ晚會，呢瘋狂嘅一晚將成為我回憶中最難忘嘅一部份…… 
+接下來人生篇章將揭開新一頁，願大家喺人生路上不忘彼此，亦有向前嘅勇氣，勇敢追夢！` },
+        { name: "Yoyo", msg: `6C裡的我們，個性迥然，各有喜好，但深藏在班級裡的，是獨一份滿溢的溫暖與善良。 很慶幸青春裡能夠遇見你們，身在6C這個大家庭，日日都被  歡笑圍繞。正因為有一班同學相伴，就連上學，都變成一件值得期待的事。
+數載朝夕相伴，有幸與各位相逢於青春。
+世人皆祝願彼此前程似錦，而我只希望大家永遠快樂，一直奔赴屬於自己的熱愛。
+畢業快樂呀！我最珍貴的幸運草們🍀！` },
+        { name: "Wing", msg: `顧這三年,才發現原來我們一起經歷了不少事情,創造了不少回憶。如今,中學生涯居然要結束了,實在感概。
+實在感恩能夠遇到你們這一班同學,祝各位前程似錦！` },
+        { name: "Erica", msg: `致親愛的6C：
+不敢想像我們真的要畢業了,認識到你們真的是一件特別幸福的事情。我喜歡你們的善良和真誠，我們總會互幫互助，每個人總是帶著善意去對待彼此，不曉得未來還能否遇見像你們般如此善良的人，謝謝你們每一個人的出現。
+我特別慶幸自己寫了《四葉之約》這首歌，它成為了我們班獨一無二，最特別的印記，不知道你們以後還能否記得它，但希望當你們再次聽到「凝聚起熠熠生輝的你…」的時候就會想起這段明媚動人的青春，那些在教室歡呼的時刻，放學練習音樂日，每一個全班爆笑的瞬間，希望你們都能記起那些最純粹的美好。
+祝願6C每個人都能前程似錦，活出你們想要的人生！` },
+        { name: "Haley", msg: `親愛的6C朋友們：
+時光飛逝，轉眼間我們就離開校園，將要踏入廣闊無垠的未來。
+看著那些被清空的 locker、寫滿祝福的校服，手機裡一張張捨不得刪除的抽象影片，還有很多記在心底的無厘頭gag，才驚覺那些我們總覺得漫長、偶爾抱怨的中學生活，真的已經走到盡頭了。
+以前的我總覺得三年很長，日子裡塞滿了背不完的十二篇範文、抄不完的 SDLJ，還有永遠寫不完的 MC 卷；但現在回望，卻發現三年其實很短，好像我們才剛剛熟悉彼此，就要揮手道別。
+三年，猶如黃粱一夢。但夢醒之後，你們給我的笑聲、支持與部伴，  卻會一直留存，成爲心中一個<最珍貴的角落>。 
+願我們在各自的領域或夢想中勇敢發光，保有現在的純粹與善良, 祝願未來一切安好、健康平安!
+未來有綠，一定再見。` },
+        { name: "Sheeny", msg: `在這三年間，我慶幸能在才華洋溢的6C班。平日上堂時、畫壁報時、或是talent show，都感受到每個同學的多才多藝。要數最難忘的一瞬間，當然是F6 Music day。由台下的作曲填詞，到上台時合唱演奏，整場表演100%出自6C的努力。在表演完畢，躹躬致意的一刻，那種團結撼動了我的心弦。
+我亦很感謝在班中每一位支持我的同學和朋友。一起渡過了漫長的課堂，經過了大小煩惱，捱過了沉悶的study leave。又或是送一句「唔洗比自己咁大壓力」來鼓勵我。
+未來的6C在各奔前程時再回望這段歷史，或許已像褪色午夜殘片。但希望我們仍清晰記得這三年間的那一種團結。` },
+        { name: "Lolam", msg: `我心中嘅6C班聚是一團火，散是滿天星。無論是在music day展現才華，在sports day揮灑汗水，抑或是在running friends團結合作嘅你，都閃耀住屬於自己嘅光芒。
+也許未來我哋分道揚鑣，但正正因為曾經並肩走過，呢段時光先顯得更加珍貴。
+願未來嘅日子裡，大家會喺各自嘅天空中發光發亮，就算各散東西，都唔會忘記，曾經有一班叫6C嘅人，一齊笑過、拼過、成長過。` },
+        { name: "Scarlett ", msg: `6C在我中心永遠是最和諧、團結的一班。
+在我們共同努力下我們榮獲Running Friends冠軍、班際壁報設計冠軍、班相拍攝冠軍以及Music Day 班際合唱冠軍。我們又有4次燒烤和打邊爐的班會活動。每次活動同甘共苦的經歷將我們的關係拉近，變得更合拍、更融洽、更熟悉彼此。
+最感動一年當然是中六！起初仍擔心同學會只顧獨自溫書，令到班房學習氣氛沉悶、無趣、緊張。幸運地我們漸漸適應DSE帶來的壓力，經常在小息午膳時苦中作樂。有Andrea歡樂的笑聲，有Kenny風趣的歌聲，有大家quiz前後的討論聲。
+多謝你們在我無精打采的時候給了我放鬆的空間。
+6C世一！`},
+        { name: "Elaine", msg: `好幸運遇到一班好善良又有趣嘅同學！回顧返原來三年以嚟，好多好難忘嘅經歷都讓我地更加團結和諧。
+最記得係學校班會活動BBQ，最尾差唔多用曬啲炭於是成班人一齊龜縮喺一個爐面前圍爐取暖，臨到走嘅時候仲落咗場大雨，莫名覺得雖然狼狽但青春，同埋因為留到好夜比人趕走哈哈。
+但最有感觸或許係F5嘅music day，唱住自己班作嘅歌，嗰種一齊努力去搞好一件事嘅感覺真係好熱血！意識到可能係最後一次就好唔捨得。
+仲有平時班裡面莫名產生嘅gag、睇住同學同老師鬥嘴、一齊捱F6備考...好開心有咁多美好回憶同埋認識到大家，不論未來會否再見，但祝愿大家前途似錦、鵬程萬里！` },
+        { name: "Nicole", msg: `記得form 4 嗰年踏入班房，見到好多個陌生嘅面孔有啲不安，但係係三年入面大家都慢慢打成一片，係唔同嘅班會活動入面大跳大唱，一齊笑一齊癲唔使注意形象真係一件好幸福嘅事。
+C班係好warm 嘅一班，同學好nice，有咩都會盡力幫手。我大個咗都唔會忘記呢段美好嘅時光，呢一段一班人一齊操卷一齊玩嘅時光。` },
+        { name: "Melody ", msg: `Dear 6C,
+        It is still hard to believe our 3 years together is drawing to a close. Some of us stepped into this class not knowing each other but now we are exiting it as friends who have laughed, studied and faced challenges together. From Running Friends to class activities to Music Day, we truly have made so many unforgettable memories. However, I think the ones I will cherish most are the mundane school days, where we cracked jokes, laughed and simply existed in the moment. I hope wherever the future takes us, our time as the Clovers will remain in everyone's hearts.` },
+        { name: "Lisa", msg: `眨吓眼就已經同呢班人一齊咗三年，見到一直以嚟大家好努力搞活動去凝聚氣氛，隨着一次又一次嘅班會活動、旅行、甚至係去到中六嘅music堂等等，感覺到大家聚埋一齊嗰份純粹嘅開心，講到最深刻嘅一定係music day，尤其係f5一齊去唱一首屬於我哋嘅原創作品，唱完之後真係覺得好感動，同埋覺得可以令到咁多人都投入呢個氣氛絕對唔係一件容易嘅事！相信之後即使離開咗呢間學校都一定唔會忘記呢份團結同感情 :D` },
+        { name: "Chloe Tam", msg: `6C 係真誠、團結、有愛既一班。由開初見面仲有少少尷尬, 到後來大家互相幫助。
+無論係平時有學習上既問題, 去到music day/ 班會活動/ sports days，大家都團結一致，各展所長。聚是一團火，散是滿天星。
+6C 既每個人都係咁獨特, 但感恩係高中3年有機會同大家做同學, 畢業後我都會記掛住我地既相處點滴, 我地日後再會!!` },
+        { name: "Wincy", msg: `我想答謝6C班的每一位，不論是學術知識，還是日常生活點滴，都願意跟我分享，讓我深受啟發。
+我亦感恩各位籌備活動及準備比賽時付出不少時間和心機，令活動得以順利舉行，在比賽中亦獲得滿意的成績，為大家留下愉悅和美好的回憶。` },
+        { name: "Chloe Wai", msg: `香港雖然唔大，但命運咁啱安排我地係同一間中學，高中同班3年先比咗我地互相熟悉嘅機會>< 
+好開心可以遇到你地每一個，而家脫離校園後有時都會回想返一齊上堂，奮鬥music day的經歷，每次上堂聽到大家既笑聲都會即刻嚇醒。
+感謝6C每一位幫我呢個透明人創造咗一段美好的回憶，我會永遠記住同大家吹水玩遊戲的時刻，未來見！` },
+        { name: "Andrea", msg: `6C係一班好有驚喜嘅一班，有好多好有趣嘅人喺呢一班入面真係難得。
+6C入面最難忘應該係BBQ，第一次見到晒大家不為人知、瘋狂同埋搞笑嘅一面。嗰次大家都玩得好盡興好開心，真係希望可以encore多次呢類event，再同大家一齊玩。
+最後，希望依家同未來嘅6C要一直都幸福、幸運同埋最最最重要係快樂！` },
+        { name: "Ginny", msg: `6C have always been so warm and everyone was like family to one another. Loads of love and help was received in my time as a part of 456C. May everyone in 6C set sail and experience a smooth future full of hopes and dreams.` },
+        { name: "Emily", msg: `「凝聚起熠熠生輝的你，留下這青春中的憶記⋯⋯」好直接咁講，我真係好鍾意456Clovers，一班人一齊走過甘苦交織嘅路，何等難得？
+願我們聚是一團火，散是滿天星。` },
+        { name: "Owen", msg: `這三年，不足以讓每個人如家人般相熟，在數十載的人生中也或許如曇花一現，但卻足以在我生命裏面留下至深的一筆。6C班可以是安靜的，也可以是吵鬧的，而我總能在這日常中找到自己的安舒區，聆聽奮筆疾書的聲音，或者加入八個男生的嬉戲中。這無非是一種幸運，能夠在這班房裏面留下令人會心微笑的回憶。
+感謝每一位同行者，在我的生命中給予我成長和繼續前進的理由，並也讓我在你們每一個的生命中留下一雙足印；或許在很多年後，你我都能帶著彼此的祝福走下去。
+「我記得 曇花盛放」願我們也能記得這四葉之約。未來見！` },
+        { name: "Hinson", msg: `呢3年來，我發現6C嘅大家都好nice，雖然form4嗰陣我地仲未係好熟，但係到左form5嘅music day，我覺得大家都好認真，成件事超級熱血🔥🔥。仲記得司儀宣布我地驘左嗰陣，我真係好開心，我地嘅付出得到了回報。
+祝6C班嘅大家畢業快樂，得閒飲茶🍵` },
+        { name: "Kenton", msg: `6C係一個好神奇嘅班別， 由30個性格完全唔同嘅 獨立個體， 凝聚成一班全校最團結嘅班別。 由music Days到班別比賽， 每個人都各展所長。 感恩可以喺高中三年做同學，畢咗業之後會珍惜昔日喺班上面嬉皮笑臉嘅每一刻，未来見!` },
+        { name: "Angus", msg: `個人認為6C班係一班會互助互勵嘅班別。咁講係因為，每次落堂之後，大家都會聚埋一齊，問問題、解答問題。
+所以我希望6C以後唔好失去呢個特質，保持善良。` },
+        { name: "Sigmund ", msg: `They say the future belongs to those who believe in their dreams. But honestly, so does the past, and look how that turned out. ` },
+        { name: "Marcus", msg: `印象：由於C班男仔少，我也不會主動與女性說話，所以班裡於我更像真空帶。偶爾男生間的活動像有時能撥通的電話，是少有的交流。
+難忘的瞬間：5-1 月天，少有與人決裂的事。不過日常也同樣難忘，看滿身汗的KY整蠱沉睡的Kenton，跟Owen上課動手動腳，听那兩兄弟聊奇奇怪怪的，和Hinson搗鼓飛牌，還有Angus的怪叫，組成了每天難得的喘息。
+感謝老師同學們對我的寬容，尤其是老師。沒給黃紙實在感激。` },
+        { name: "Sigmund ", msg: `It has always been fun fooling around with the boys and having activities with the whole class.` },
+        { name: "KY", msg: `喺呢三年入面，大家都一齊經歷大大小小、唔同嘅事，一齊面對高低起伏，由 Sports Day 一齊跑長跑，到 Picnic Day 一齊玩，再到 Music Day 一齊上台唱歌，喺班際比賽又投入，睇得出大家對 6C 嘅熱血同激情。
+大家面對考試，又會彼此鼓勵、扶持，睇得出大家對彼此嘅關心，平時亦會吹下水，一齊玩。三年間，大家由彼此都唔熟，到而家熟少少，甚至玩到有啲癲，差啲以為係青山走犯。
+喺呢三年間，大家見證住彼此成長，希望以後能夠繼續聯絡。
+Forever a 6C member!` }
+    ];
+
+    let quizQuestions = [
+        { question: "Clover 係邊個改噶？", options: ["Dr. Lo", "Ms. Tse", "Mr. Wu", "Ms. Lam"], correct: 3 },
+        { question: "那個不是我們班老師日常的口頭禪?", options: ["（托頭思考） Um, Funny wo", "6C BB", "加油呀年輕人！", "（轉凳，戳smartboard）Dopamine--4-(2-aminoethyl)benzene-1,2-diol"], correct: 3 },
+        { question: "哪項不是我哋在中四壁報嘅摩天輪裏面填的？", options: ["MBTI", "星座", "童年照片", "姓名"], correct: 1 },
+        { question: "哪種植物與我們班這三年無關？", options: ["向日葵-Sunflowers", "薰衣草-lavender", "多肉- Succulents", "雛菊-Daisies"], correct: 3 },
+        { question: "以下哪一項不是Dr.Lo的自己鑽研的課題？", options: ["單杠+冷水澡", "自拍+攝影", "MBTI+AI", "統一派位系統的probability+男女同齡入學的不公平性"], correct: 1 },
+        { question: "中四的聖誕節， 同學cos什麽角色", options: ["天使低低B", "奴隸獸", "奧特曼超人", "Sailor Moon"], correct: 0 },
+        { question: "4C超越自我早會的3位精靈是來自哪一個組織的？", options: ["世界普渡衆生組織", "超越自我組織", "世界認真組織", "世界超越自我組織"], correct: 3 },
+        { question: "哪一首歌是在4C Lunchtime Concert 中沒有出現過的？", options: ["孤單心事（普通話版）", "A Thousand Years", "大魚", "聖馬力諾之心"], correct: 0 },
+        { question: "哪一個不是我們在F4 Music Day 用的樂器？", options: ["鋼琴-（Owen）", "小提琴-（Sheeny-）", "木箱鼓-（Andrea）", "吉他-（Ginny）"], correct: 1 },
+        { question: "KY哪一個英文字母的書寫筆畫沒有惹起爭議？", options: ["E", "H", "F", "B"], correct: 1 },
+        { question: "中五中六的壁報中，沒有以下哪一項元素呢？", options: ["紙飛機", "Doraemon時光機", "路牌", "信封和菲林"], correct: 2 },
+        { question: "以下哪一句是帝女花的真實歌詞?", options: ["落街我無錢買麵包 靠錢又怕被人鬧。", "落花滿天蔽月光 借一杯附薦鳳台上", "肚餓似餓貓，受了飢寒我開聲喊。", "關公都点头 有料"], correct: 1 },
+        { question: "中五聖誕節 Ms.Lam 送襪子的意義是什麽", options: ["Walk with You", "Happy Birthday", "Happy New Year", "Happy Holiday"], correct: 0 },
+        { question: "我們級最巔峰的考試前請假人數", options: ["30人", "32人", "35人", "37人"], correct: 1 },
+        { question: "以下哪一位老師沒有和我們班一起去廣州考察團？", options: ["Dr.Lo", "Ms. lam", "Mr. Wu", "Ms. Lai"], correct: 2 },
+        { question: "以下哪一句不是《四葉之約》正確的歌詞？", options: ["凝聚起習習生輝的你 留下這青春中的憶記", "每個你皆是瑰寶 無需執著於分數", "不怕未來的散聚 初心永不減退", "畫出 四葉草的美"], correct: 0 },
+        { question: "哪個是「上船」的正確意思?", options: ["返班房", "無意思（同67一樣無意義）", "放學", "去厠所"], correct: 3 },
+        { question: "以下那一封是DMC老師發送的電郵？", options: ["到底有沒有人唔識去厠所", "到底有幾多人唔識去厠所", "到底多少人唔識上厠所", "到底幾多人唔去厠所"], correct: 1 },
+        { question: "哪個是我們 Music Day 用的道具？", options: ["風車造型的泡泡機", "手燈", "四葉草髮夾", "以上皆是"], correct: 3 },
+        { question: "6C颱風買定離手， 最後邊個選項贏？", options: ["放全日", "返全日", "五樓漏水", "放半日"], correct: 0 },
+        { question: "6C颱風買定離手， Dr支持了多少？（6C虛擬貨幣）", options: ["$100", "$200", "$500", "$1000"], correct: 3 },
+        { question: "哪一句祝福語是出現在6C 生日banner上？", options: ["學業有成", "金榜題名", "生日快樂", "金榜提名"], correct: 3 },
+        { question: "6C 幾多個女仔跑1500 Open？", options: ["10", "12", "15", "17"], correct: 2 },
+        { question: "哪個不是大家正確的花名？", options: ["增漪榛", "甘擅痕", "黃驕响", "喂泳男"], correct: 0 },
+        { question: "哪一個不是在 Music Exam Frozen 組出現的道具？", options: ["橙", "酒精噴霧", "紙袋頭套", "空氣清新劑"], correct: 1 },
+        { question: "哪一首歌在男生Music Exam中出現？（注意歌名）", options: ["小丸子問題多", "超人的主題曲", "Candy Ball", "美少女鬥士"], correct: 1 },
+        { question: "memes/ 貼紙上常出現的印度男人，叫做什麽？", options: ["IDK", "Xavier/Pakalu Papito", "IDC", "印度某人"], correct: 2 },
+        { question: "在一樓中間冷氣機往右數（14，2）會發現什麽？", options: ["Tom Lee's 眼鏡", "Tom Lee's 筆", "Tom Lee's 學生卡", "Tom Lee's 手機"], correct: 0 },
+        { question: "Last Eng Lesson, Ms Lam 送了哪6個C給我們？", options: ["Certificate+ （QR）Code", "Cross+ Clicker", "Chocolate+ Corn Tea", "Clovers"], correct: 3 },
+        { question: "Grad Camp時，Dr話過左幾多點未填留言會請全班食野呢？", options: ["06：00", "12：00", "16：00", "18：00"], correct: 3 }
+    ];
+    while(quizQuestions.length < 20) {
+        quizQuestions.push({ question: `6C回憶問答題 ${quizQuestions.length+1}：請選出正確答案`, options: ["選項A", "選項B", "選項C", "選項D"], correct: 0 });
+    }
+
+    let userAnswers = new Array(quizQuestions.length).fill(null);
+    let currentQuizIndex = 0;
+    let quizFinished = false;
+
+    function getFamiliarity(score, total) {
+        if (score === total) return "🎉 滿分! 6C forever！🎉 BTW,你玩過幾多次?_? ";
+        else if (score === 0) return"???????????????????????"
+        else return "💚原來三年，6C班一起經歷了那麽多搞笑的回憶。💚";
+    }
+    function renderPdfPage() { 
+        return `<div class="section-card">
+            <div class="section-title">📅 數算主恩</div>
+            <div style="position: relative; width: 100%; height: 85vh; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16);">
+                <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0; margin: 0;" src="https://www.canva.com/design/DAHJvoPOTOQ/3O8BvppvF7eXbdeVtuQACA/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen"></iframe>
+            </div>
+            <div class="info-note">📄縮放查看｜<a href="https://www.canva.com/design/DAHJvoPOTOQ/3O8BvppvF7eXbdeVtuQACA/view?utm_content=DAHJvoPOTOQ&utm_campaign=designshare&utm_medium=embeds&utm_source=link" target="_blank" rel="noopener">在新視窗開啟</a></div>
+        </div>`; 
+    }
+
+    function renderLinksPage() {
+        return `
+        <div class="section-card">
+            <div class="section-title">🔗 6C鏈接</div>
+            <div class="links-section">
+                <div class="links-subtitle">📸 社交媒體</div>
+                <div class="links-grid">
+                    <div class="link-card ig-card">
+                        <a href="https://www.instagram.com/2326_cdg_456cc?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">
+                            📸 Instagram 6C專頁
+                        </a>
+                        <div class="link-desc">搞笑日常</div>
+                    </div>
+                    <div class="link-card ig-card">
+                        <a href="https://drive.google.com/drive/folders/1H9It0emACt7ABPcZrgn9g8f-jG47M75j?usp=sharing" target="_blank" rel="noopener noreferrer">
+                            📁 Google Drive 相片
+                        </a>
+                        <div class="link-desc">（如有需要，請儘快備份，學校Google account 將於九月份注銷）</div>
+                    </div>
+                    <div class="link-card ig-card">
+                        <a href="https://youtu.be/ybLUFa9e8m4?si=lZWnuKLIn_G0nBIT" target="_blank" rel="noopener noreferrer">
+                            🍀 23-26 456C 班歌《四葉之約》
+                        </a>
+                        <div class="link-desc">（高中班際合唱冠軍 及 最佳舞台表演獎）</div>
+                    </div>
+                    <div class="link-card ig-card">
+                        <a href="https://www.instagram.com/2326_cdg_456cc?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">
+                            🌻 Music Day 《陽光點的歌》 
+                        </a>
+                        <div class="link-desc">（高中班際大合唱季軍）</div>
+                    </div>
+                </div>
+            </div>
+            <div class="links-section">
+                <div class="links-subtitle">✉️ Last Day 信件(内容複刻版） </div>
+                <div class="links-list-vertical">
+                    <div class="link-item-vertical">
+                        <a href="https://canva.link/9yg8bejp7pym4us" target="_blank" rel="noopener noreferrer">
+                            📜 徐校長 2026 中六 Last Day 的信
+                        </a>
+                        <div class="link-desc">校長的信</div>
+                    </div>
+                    <div class="link-item-vertical">
+                        <a href="https://canva.link/bcwef7zr66pbc2q" target="_blank" rel="noopener noreferrer">
+                            ✈️ Ms Chin Last CSD Lesson 的信
+                        </a>
+                        <div class="link-desc">Ms Chin 的信</div>
+                    </div>
+                    <div class="link-item-vertical">
+                        <a href="https://drive.google.com/file/d/1WvR0MOluyk0sHe0Zxz3OQ8xI2Hs7nMYa/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">
+                            🧸  Last ENG Lesson 的錄音
+                        </a>
+                        <a href="https://docs.google.com/presentation/d/1kLEJ5nvreCm3dRe5WCz-3J-HlsQDiD-Z/edit?usp=drivesdk&ouid=109722200277518214352&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer">
+                            🧸  Last ENG Lesson 的PPT
+                        </a>
+                        </a>
+                        <a href="https://youtu.be/u6gornGfC1M?si=XrNTTGWG1W1IDs7p" target="_blank" rel="noopener noreferrer">
+                            🧸  I Wish You Bad Luck (YouTube4:30-6:53)
+                        </a>
+                        <div class="link-desc"> 🧸Last but not Least English Lesson_27Feb2026 </div>
+                    </div>
+                    <div class="link-item-vertical">
+                        <a href="https://www.canva.com/design/DAHKAloofno/v_HMBlR6cg9BnLGN5Vv4CQ/view" target="_blank" rel="noopener noreferrer">
+                            🧪  Last Chem Lesson 的信
+                        </a>
+                        <div class="link-desc"> 🧪 子榮sir last Chem Lesson 的信 </div>
+                    </div>
+                    <div class="link-item-vertical">
+                        <a href="https://www.canva.com/design/DAHKApLAh4E/bHqNgXi45jmWkxYC1s64uA/view" target="_blank" rel="noopener noreferrer">
+                            🎶 Ms. Tse Study Leave 寄來的信
+                        </a>
+                        <div class="link-desc"> 🎶 Ms. Tse Study Leave 寄來的信 </div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-note">連結將在新視窗中開啟</div>
+        </div>`;
+    }
+/*防更改，如果改原始代碼，就會變亂碼*/
+    function escapeHtml(str) { 
+        if(!str) return ''; 
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')   
+            .replace(/'/g, '&#039;');  
+    }
+
+/*${} is JS官方語法，叫做「字串插值（String Interpolation）」。 似py 的f{} 一樣
+Like py still have str and val crush tgt, so use ${} can help like f{}in py*/
+
+    function openTeacherModal(name, msg) {
+        document.getElementById('teacherModalName').innerHTML = `🌟 ${escapeHtml(name)}`;
+    
+    
+        let formattedMsg = msg
+            .replace(/\n/g, '<br>')  // 換行變 <br>恢復原狀
+            .replace(
+                /(https?:\/\/[^\s]+)/g,  // 找出所有網址
+                '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #3c7e48; text-decoration: underline;">$1</a>'
+            );
+    
+        document.getElementById('teacherModalMessage').innerHTML = formattedMsg;
+        document.getElementById('teacherModal').style.display = 'flex';
+    }
+
+    function closeTeacherModal() {
+        document.getElementById('teacherModal').style.display = 'none';
+    }
+
+    function renderTeacherPage() {
+        let html = `<div class="section-card"><div class="section-title">🌟 老師留言區</div>`;
+        html += `<div class="info-note" style="margin-bottom:1rem;">💡 點擊老師卡片放大睇完整留言</div>`;
+        teacherMessages.forEach(t => {
+            const preview = t.msg.substring(0, 80);
+            html += `
+                <div class="teacher-msg" data-name="${escapeHtml(t.name)}" data-msg="${escapeHtml(t.msg)}">
+                    <div class="teacher-name">🌟 ${escapeHtml(t.name)}</div>
+                    <div class="teacher-preview">${escapeHtml(preview)}...</div>
+                    <div class="teacher-hint">👇 點擊放大完整留言</div>
+                </div>
+            `;
+        });
+        html += `<div class="info-note">💖 多謝各位老師依三年的教導，我們會帶著在主恩的愛一直走下去的！</div></div>`;
+        return html;
+    }
+
+    function bindTeacherEvents() {
+        const cards = document.querySelectorAll('.teacher-msg');
+        cards.forEach(card => {
+            card.onclick = () => {
+                const name = card.getAttribute('data-name');
+                const msg = card.getAttribute('data-msg');
+                openTeacherModal(name, msg);
+            };
+        });
+    }
+    /*
+    在 JavaScript 中，+= 是一個常用的官方運算子，（Addition Assignment）。
+    用最簡單的話來說，它的功用就是：「在原本已經寫好的內容後面，『再依序黏上（累加）新的內容。」
+    javascript
+ 1. 一開始，紙箱裡只有一句標題
+let html = `<div>🌟 老師留言區</div>`;
+
+// 2. 💡 使用 += 號：保留原本的標題，並在「後面」接著黏上的卡片
+html += ... your code
+
+// 3. 💡 再用一次 += 號：保留前面的所有東西，在最尾端黏上謝師感言
+*/
+
+    let currentPageIndex = 0;
+    let itemsPerPage = 3;
+    let totalPages = Math.ceil(carouselMessages.length / itemsPerPage);
+
+    function getCurrentCards() {
+        const start = currentPageIndex * itemsPerPage;
+        const end = start + itemsPerPage;
+        return carouselMessages.slice(start, end);
+    }
+
+    function showExpandedMessage(name, fullMsg) {
+        const oldExpand = document.getElementById('expandedMessageArea');
+        if (oldExpand) oldExpand.remove();
+        const container = document.querySelector('.carousel-container');
+        if (container) {
+            const expandHtml = `
+                <div id="expandedMessageArea" class="expanded-message">
+                    <button class="close-expand" id="closeExpandBtn">✕</button>
+                    <div class="expanded-name">🎓 ${escapeHtml(name)}</div>
+                    <div class="expanded-content">${escapeHtml(fullMsg)}</div>
+                </div>
+            `;
+            container.insertAdjacentHTML('afterend', expandHtml);
+            const closeBtn = document.getElementById('closeExpandBtn');
+            if (closeBtn) closeBtn.onclick = () => {
+                const div = document.getElementById('expandedMessageArea');
+                if (div) div.remove();
+            };
+        }
+    }
+    function renderCarouselPage() {
+        const currentCards = getCurrentCards();
+        let cardsHtml = '';
+        currentCards.forEach(msg => {
+            cardsHtml += `
+                <div class="carousel-card-3" data-name="${escapeHtml(msg.name)}" data-fullmsg="${escapeHtml(msg.msg)}">
+                    <div class="card-name-3">🎓 ${escapeHtml(msg.name)}</div>
+                    <div class="card-preview-3">${escapeHtml(msg.msg.substring(0, 80))}...</div>
+                    <div class="card-hint-3">👇點擊完整留言</div>
+                </div>
+            `;
+        });
+        return `<div class="section-card">
+            <div class="section-title">🎓 留言板 </div>
+            <div class="carousel-container">
+                <div class="carousel-track-3" id="carouselTrack3">
+                    ${cardsHtml}
+                </div>
+                <div class="carousel-controls-3">
+                    <button class="ctrl-btn" id="prevPageBtn" ${currentPageIndex === 0 ? 'disabled' : ''}>◀ 上一組</button>
+                    <button class="ctrl-btn" id="nextPageBtn" ${currentPageIndex === totalPages-1 ? 'disabled' : ''}>下一組 ▶</button>
+                </div>
+                <div id="expandedMessageArea" style="width:100%; margin-top:1rem;"></div>
+            </div>
+            <div class="info-note">✨ 👇點擊完整留言</div>
+        </div>`;
+    }
+
+    function bindCarouselEvents() {
+        const prevBtn = document.getElementById('prevPageBtn');
+        const nextBtn = document.getElementById('nextPageBtn');
+        
+        if (prevBtn) {
+            prevBtn.onclick = () => {
+                if (currentPageIndex > 0) {
+                    currentPageIndex--; //JS=（Decrement Operator）把目前的數字，減1。 py： -=1
+                    const expandDiv = document.getElementById('expandedMessageArea');
+                    if (expandDiv) expandDiv.innerHTML = '';
+                    refreshCarouselUI();
+                }
+            };
+        }
+        if (nextBtn) {
+            nextBtn.onclick = () => {
+                if (currentPageIndex < totalPages - 1) {
+                    currentPageIndex++;
+                    const expandDiv = document.getElementById('expandedMessageArea');
+                    if (expandDiv) expandDiv.innerHTML = '';
+                    refreshCarouselUI();
+                }
+            };
+        }
+        /*Js箭頭函式寫法（~Py：lambda Anony function）
+        Python：： lambda e: print(e)
+        btw JS：： log e*/
+        const cards = document.querySelectorAll('.carousel-card-3');
+        cards.forEach(card => {
+            card.onclick = (e) => {
+                const name = card.getAttribute('data-name');
+                const fullMsg = card.getAttribute('data-fullmsg');
+                showExpandedMessage(name, fullMsg);
+            };
+        });
+    }
+
+    function refreshCarouselUI() {
+        const container = document.getElementById('mainContent');
+        const activeBtn = document.querySelector('.nav-btn.active');
+        if (container && activeBtn && activeBtn.getAttribute('data-page') === 'carousel') {
+            container.innerHTML = renderCarouselPage();
+            bindCarouselEvents();
+        }
+    }
+
+    function renderGamePage() {
+        if (quizFinished) {
+            let score = 0;
+            for (let i = 0; i < userAnswers.length; i++) {
+                if (userAnswers[i] !== null && userAnswers[i] === quizQuestions[i].correct) score++;
+            }
+            const familiarityMsg = getFamiliarity(score, quizQuestions.length);
+            return `<div class="section-card">
+                <div class="section-title">🤡 彩蛋遊戲結果</div>
+                <div class="result-area">
+                    <div class="score-big">${score} / ${quizQuestions.length}</div>
+                    <div class="familiarity">${familiarityMsg}</div>
+                    <button class="btn-submit" id="restartQuizBtn">🔄 重新挑戰</button>
+                </div>
+            </div>`;
+        }
+        
+        const q = quizQuestions[currentQuizIndex];
+        const hasAnswered = userAnswers[currentQuizIndex] !== null;
+        const selectedIdx = userAnswers[currentQuizIndex];
+        const isCorrect = hasAnswered && (selectedIdx === q.correct);
+        
+        let optionsHtml = '';
+        q.options.forEach((opt, idx) => {
+            let extraStyle = '';
+            let statusIcon = '';
+            if (hasAnswered) {
+                if (idx === q.correct) {
+                    extraStyle = 'style="background: #c8e0b2; border:2px solid #4cae4c;"';
+                    statusIcon = ' ✓';
+                } else if (idx === selectedIdx && idx !== q.correct) {
+                    extraStyle = 'style="background: #ffe0e0; border:2px solid #e74c3c;"';
+                    statusIcon = ' ✗';
+                }
+            }
+            optionsHtml += `<div class="quiz-option" data-opt="${idx}" ${extraStyle}>${String.fromCharCode(65+idx)}. ${escapeHtml(opt)}${statusIcon}</div>`;
+        });
+        
+        const resultHtml = hasAnswered 
+            ? `<div style="margin-top: 1rem; padding: 0.8rem; background: ${isCorrect ? '#d4edda' : '#f8d7da'}; border-radius: 24px; text-align: center;">
+                ${isCorrect ? '✅ 答對!' : `❌ 答錯！正確答案是 ${String.fromCharCode(65+q.correct)}. ${escapeHtml(q.options[q.correct])}`}
+               </div>`
+            : '';
+        
+        return `<div class="section-card">
+            <div class="section-title">🤡 彩蛋小遊戲 </div>
+            <div class="quiz-area">
+                <div class="quiz-question">📌 第 ${currentQuizIndex+1} / ${quizQuestions.length} 題<br>${escapeHtml(q.question)}</div>
+                <div class="quiz-options" id="quizOptions">
+                    ${optionsHtml}
+                </div>
+                ${resultHtml}
+                <div style="display: flex; justify-content: center; margin-top: 1.5rem;">
+                    <button class="ctrl-btn" id="nextQuizBtn" ${!hasAnswered ? 'disabled style="opacity:0.5;"' : ''}>
+                        ${currentQuizIndex === quizQuestions.length-1 ? '🏆 完成並睇分數 🏆' : '下一題 ▶'}
+                    </button>
+                </div>
+                <button class="btn-submit" id="resetQuizBtn" style="background:#b0c8a3; margin-top: 1rem;">🔄 重新開始遊戲</button>
+            </div>
+            <div class="info-note">💡 答完先可以去下一題。</div>
+        </div>`;
+    }
+    
+    function bindQuizEvents() {
+        const options = document.querySelectorAll('.quiz-option');
+        options.forEach(opt => {
+            opt.removeEventListener('click', opt._clickHandler);
+            const handler = () => {
+                if (quizFinished) return;
+                if (userAnswers[currentQuizIndex] !== null) return;
+                const selected = parseInt(opt.getAttribute('data-opt'));
+                userAnswers[currentQuizIndex] = selected;
+                refreshQuizUI();
+            };
+            opt.addEventListener('click', handler);
+            opt._clickHandler = handler;
+        });
+        
+        const nextBtn = document.getElementById('nextQuizBtn');
+        if (nextBtn) {
+            nextBtn.onclick = () => {
+                if (quizFinished) return;
+                if (userAnswers[currentQuizIndex] === null) {
+                    alert('請先回答當前題目～');
+                    return;
+                }
+                if (currentQuizIndex === quizQuestions.length - 1) {
+                    quizFinished = true;
+                    refreshQuizUI();
+                } else {
+                    currentQuizIndex++;
+                    refreshQuizUI();
+                }
+            };
+        }
+        
+        const resetBtn = document.getElementById('resetQuizBtn');
+        if (resetBtn) {
+            resetBtn.onclick = () => {
+                userAnswers = new Array(quizQuestions.length).fill(null);
+                currentQuizIndex = 0;
+                quizFinished = false;
+                refreshQuizUI();
+            };
+        }
+        
+        const restartBtn = document.getElementById('restartQuizBtn');
+        if (restartBtn) {
+            restartBtn.onclick = () => {
+                userAnswers = new Array(quizQuestions.length).fill(null);
+                currentQuizIndex = 0;
+                quizFinished = false;
+                refreshQuizUI();
+            };
+        }
+    }
+    
+    function refreshQuizUI() {
+        const container = document.getElementById('mainContent');
+        const activeBtn = document.querySelector('.nav-btn.active');
+        if (container && activeBtn && activeBtn.getAttribute('data-page') === 'game') {
+            container.innerHTML = renderGamePage();
+            bindQuizEvents();
+        }
+    }
+
+    let currentPage = 'pdf';
+    
+    function switchToPage(pageId) {
+        currentPage = pageId;
+        let html = '';
+        if (pageId === 'teacher') html = renderTeacherPage();
+        else if (pageId === 'carousel') html = renderCarouselPage();
+        else if (pageId === 'game') html = renderGamePage();
+        else if (pageId === 'pdf') html = renderPdfPage();
+        else if (pageId === 'links') html = renderLinksPage();
+        
+        const contentDiv = document.getElementById('mainContent');
+        if (contentDiv) contentDiv.innerHTML = html;
+        
+        if (pageId === 'teacher') bindTeacherEvents();
+        if (pageId === 'carousel') bindCarouselEvents();
+        if (pageId === 'game') bindQuizEvents();
+        
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            if (btn.getAttribute('data-page') === pageId) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+    }
+    
+    function bindNavEvents() {
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchToPage(btn.getAttribute('data-page')));
+        });
+        const logoHome = document.getElementById('homeLogoBtn');
+        if (logoHome) logoHome.addEventListener('click', () => switchToPage('carousel'));
+    }
+    
+    function init() { 
+        switchToPage('carousel');
+        bindNavEvents(); 
+    }
+    
+    init();
+</script>
+<div id="teacherModal" class="modal" onclick="closeTeacherModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeTeacherModal()">&times;</span>
+        <div class="modal-name" id="teacherModalName"></div>
+        <div class="modal-message" id="teacherModalMessage"></div>
+    </div>
+</div>
+</body>
+</html>
